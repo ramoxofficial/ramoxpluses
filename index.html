@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>soon - ramoxplus</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #111;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      padding: 40px;
+      background-color: #222;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      width: 90%; /* عرض 90 درصد از صفحه */
+      max-width: 800px;
+      height: 80%; /* ارتفاع 80 درصد از صفحه */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .soon {
+      font-size: 4rem;
+      font-weight: bold;
+      color: #fff;
+      position: relative;
+    }
+
+    #cursor {
+      position: absolute;
+      animation: blink 1s steps(1) infinite;
+      color: #fff;
+    }
+
+    .form-container {
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 15px;
+      font-size: 16px;
+      border: 2px solid #444;
+      border-radius: 12px;
+      resize: none;
+      color: #bbb;
+      background-color: #333;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    textarea:focus {
+      border-color: #00bcd4;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 30px;
+      font-size: 18px;
+      color: #111;
+      background-color: #00bcd4;
+      border: 2px solid #00bcd4;
+      border-radius: 20px; /* گوشه‌های دکمه خمیده */
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(0, 188, 212, 0.5);
+    }
+
+    button:hover {
+      background-color: #fff;
+      color: #00bcd4;
+      box-shadow: 0 0 20px rgba(0, 188, 212, 0.7);
+    }
+
+    button:active {
+      background-color: #00bcd4;
+      color: #fff;
+      transform: scale(0.98);
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="soon">soon <span id="cursor">|</span></h1>
+    <div class="form-container">
+      <textarea id="suggestion" placeholder="پیشنهاد؟"></textarea>
+      <button id="sendButton">Send</button>
+    </div>
+  </div>
+
+  <script>
+    // تایپ کردن و پدیدار شدن خط عمودی
+    let cursor = document.getElementById("cursor");
+
+    setInterval(() => {
+      cursor.style.visibility = cursor.style.visibility === 'visible' ? 'hidden' : 'visible';
+    }, 500);
+
+    // ارسال پیشنهاد به تلگرام
+    document.getElementById("sendButton").addEventListener("click", function() {
+      let suggestion = document.getElementById("suggestion").value.trim();
+      
+      if (suggestion !== "") {
+        sendToTelegram(suggestion);
+        document.getElementById("suggestion").value = ""; // پاک کردن محتوای فیلد بعد از ارسال
+      } else {
+        alert("لطفاً پیشنهاد خود را وارد کنید.");
+      }
+    });
+
+    function sendToTelegram(message) {
+      const token = "7215256501:AAGejbrrdRDbIxaBP8JNzydw4ERnxHl2y6A";
+      const chatId = "7411389770";
+      const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data.ok) {
+            alert("Your Message Send");
+          } else {
+            alert("Error");
+          }
+        })
+        .catch(error => {
+          alert("Error");
+          console.error("Error sending message to Telegram:", error);
+        });
+    }
+  </script>
+</body>
+</html>
